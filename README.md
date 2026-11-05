@@ -229,8 +229,6 @@ Example response:
 }
 ```
 
----
-
 ## 🎯 Project Goals
 
 This project demonstrates practical backend development skills, including REST API design, layered architecture, database modeling, ORM usage, automated testing, error handling, and containerized development.
