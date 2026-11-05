@@ -1,6 +1,6 @@
-# 🧩 Node CRUD
+# 🧩 Node.js Backend API
 
-A REST API built with Node.js, Express, and TypeScript, featuring a layered architecture, Prisma ORM, PostgreSQL persistence, comprehensive automated tests, and Docker Compose for containerized development.
+A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, featuring separate authentication and shopping services, JWT-based authentication, role-based authorization, Prisma ORM, automated testing, and Docker Compose.
 
 ---
 
@@ -12,6 +12,9 @@ A REST API built with Node.js, Express, and TypeScript, featuring a layered arch
 - Update product by ID
 - Delete product by ID
 - Type-safe development with TypeScript
+- JWT-based authentication
+- Role-based access control (RBAC)
+- Protected routes
 - Database access with Prisma ORM
 - PostgreSQL persistence
 - Input validation and centralized error handling
@@ -37,39 +40,72 @@ A REST API built with Node.js, Express, and TypeScript, featuring a layered arch
 ## 📁 Project Structure
 
 ```text
-prisma/
-└── schema.prisma
-src/
-├── config/
-├── controllers/
-├── helpers/
-├── middlewares/
-├── routes/
-├── services/
-├── types/
-├── app.ts
-└── server.ts
 
-tests/
+├── auth/
+│   ├── prisma/
+│   │   └── schema.prisma
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── prisma/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── app.ts
+│   │   └── server.ts
+│   └── tests/
+│
+├── shopping/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── helpers/
+│   │   ├── middlewares/
+│   │   ├── prisma/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── types/
+│   │   ├── app.ts
+│   │   └── server.ts
+│   └── tests/
+│
+├── shared/
+│   ├── prisma/
+│   │   └── schema.prisma
+│   ├── src/
+│   │   ├── helpers/
+│   │   ├── jwt/
+│   │   ├── middlewares/
+│   │   ├── prisma/
+│   │   ├── types/
+│   │   ├── config.ts
+│   └── tests/
+│
+├── docker-compose.yml
+├── .dockerignore
+└── README.md
 ```
 
 ---
 
 ## 🐳 Docker Setup
 
-The application uses Docker Compose to run the backend and PostgreSQL database as separate containers.
+The application uses Docker Compose to run two independent backend services and a PostgreSQL database.
 
 ```text
 Docker Compose
 │
-├── backend
+├── auth
 │   └── Node.js + Express
 │       └── port 8080
+│
+├── shopping
+│   └── Node.js + Express
+│       └── port 8081
 │
 └── db
     └── PostgreSQL
         └── port 5432
 ```
+
+Both backend services communicate with PostgreSQL through their configured database connections.
 
 PostgreSQL uses a Docker volume to persist data between container restarts.
 
@@ -90,7 +126,7 @@ Build and start the containers:
 docker compose up --build
 ```
 
-This starts the backend at `http://localhost:8080` and PostgreSQL on port `5432`.
+The authentication service runs on port 8080, while the shopping service runs on port 8081.
 
 Stop the containers:
 
@@ -111,12 +147,12 @@ docker compose down -v
 Configure your `.env` file with the required database credentials and connection URLs.
 
 ```env
-LOCAL_DATABASE_URL=postgres://andrii:password@localhost:5432/products_db
-DOCKER_DATABASE_URL=postgres://andrii:password@db:5432/products_db
+LOCAL_DATABASE_URL=postgres://andrii:password@localhost:5432/shopping_db
+DOCKER_DATABASE_URL=postgres://andrii:password@db:5432/shopping_db
 
 POSTGRES_USER=andrii
 POSTGRES_PASSWORD=password
-POSTGRES_DB=products_db
+POSTGRES_DB=shopping_db
 ```
 
 Use the Docker connection URL inside containers and the local connection URL when running the backend directly on your machine. Keep your actual `.env` file out of version control.
@@ -125,7 +161,17 @@ Use the Docker connection URL inside containers and the local connection URL whe
 
 ## 🗄️ Database
 
-The project uses Prisma ORM to interact with PostgreSQL. The database schema is defined in `prisma/schema.prisma`.
+The project uses Prisma ORM to interact with PostgreSQL. The database schemas are defined in `auth/prisma/schema.prisma` and `shared/prisma/schema.prisma`.
+
+The `users` model includes:
+
+- `id` — UUID primary key generated automatically.
+- `name` — required user name.
+- `email` — required, unique email address.
+- `password` — hashed password (8–100 characters).
+- `role` — user role (`user` or `admin`), defaults to `user`.
+- `created_at` — account creation timestamp set automatically.
+- `refresh_token` — stored refresh token.
 
 The `products` model includes:
 
