@@ -78,7 +78,7 @@ A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, f
 │   │   ├── config.ts
 │   └── tests/
 │
-├── docker-compose.yml
+├── compose.yaml
 ├── .dockerignore
 └── README.md
 ```
