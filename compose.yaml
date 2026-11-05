@@ -1,14 +1,33 @@
 services:
-  backend: 
-    build: .
+  shopping:
+    build: 
+      context: .
+      dockerfile: shopping/Dockerfile 
+    ports:
+      - "8081:8081"
+
+    environment:
+      - LOCAL_DATABASE_URL=${DOCKER_DATABASE_URL}
+      - ACCESS_SECRET=${ACCESS_SECRET}
+
+    depends_on:
+      db: 
+        condition: service_healthy
+
+  auth:
+    build: 
+      context: .
+      dockerfile: auth/Dockerfile
     ports:
       - "8080:8080"
 
     environment:
       - LOCAL_DATABASE_URL=${DOCKER_DATABASE_URL}
+      - ACCESS_SECRET=${ACCESS_SECRET}
+      - REFRESH_SECRET=${REFRESH_SECRET}
 
     depends_on:
-      db:
+      db: 
         condition: service_healthy
 
   db:
