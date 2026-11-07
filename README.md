@@ -1,4 +1,4 @@
-# 🧩 Node.js Backend API
+# 🧩 Backend API
 
 A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, featuring separate authentication and shopping services, JWT-based authentication, role-based authorization, Prisma ORM, automated testing, and Docker Compose.
 
