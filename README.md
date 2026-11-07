@@ -80,9 +80,10 @@ A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, f
 │   │   ├── config.ts
 │   └── tests/
 │
-├── compose.yaml
 ├── .dockerignore
 └── README.md
+├── init.sql
+├── compose.yaml
 ```
 
 ---
