@@ -54,6 +54,8 @@ A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, f
 │   └── tests/
 │
 ├── shopping/
+│   │   prisma/
+│   │   └── schema.prisma
 │   ├── src/
 │   │   ├── controllers/
 │   │   ├── helpers/
