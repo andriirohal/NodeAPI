@@ -40,7 +40,6 @@ A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, f
 ## 📁 Project Structure
 
 ```text
-
 ├── auth/
 │   ├── prisma/
 │   ├── src/
@@ -61,6 +60,7 @@ A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, f
 ├── compose.yaml
 ├── init.sql
 └── README.md
+```
 
 ---
 
