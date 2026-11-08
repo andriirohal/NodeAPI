@@ -43,48 +43,24 @@ A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, f
 
 ├── auth/
 │   ├── prisma/
-│   │   └── schema.prisma
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── prisma/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── app.ts
-│   │   └── server.ts
 │   └── tests/
 │
 ├── shopping/
 │   ├── prisma/
-│   │   └── schema.prisma
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── helpers/
-│   │   ├── middlewares/
-│   │   ├── prisma/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── types/
-│   │   ├── app.ts
-│   │   └── server.ts
 │   └── tests/
 │
 ├── shared/
 │   ├── prisma/
-│   │   └── schema.prisma
 │   ├── src/
-│   │   ├── helpers/
-│   │   ├── jwt/
-│   │   ├── middlewares/
-│   │   ├── prisma/
-│   │   ├── types/
-│   │   ├── config.ts
 │   └── tests/
 │
 ├── .dockerignore
-└── README.md
-├── init.sql
+├── .gitignore
 ├── compose.yaml
-```
+├── init.sql
+└── README.md
 
 ---
 
