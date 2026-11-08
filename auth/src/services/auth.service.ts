@@ -142,9 +142,9 @@ export async function logInUser(input: AuthInput): Promise<Result<UserResponse>>
     };
   };
 
-  const mathes = await bcrypt.compare(password, user.password);
+  const match = await bcrypt.compare(password, user.password);
 
-  if (!mathes) {
+  if (!match) {
     return {
       success: false,
       error: "This password doesn't match our records",

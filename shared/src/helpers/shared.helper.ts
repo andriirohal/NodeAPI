@@ -84,7 +84,7 @@ export function clearRefreshToken(): CookieOptions {
     httpOnly: true,
     secure: false,
     path: "/",
-    maxAge: -1,
+    maxAge: 0,
     sameSite: "lax" as const
   };
 };

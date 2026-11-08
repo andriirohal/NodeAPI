@@ -12,7 +12,7 @@ COPY auth/package*.json ./
 
 # Install app dependencies
 
-RUN npm install
+RUN npm ci
 
 # Copy the rest of the app
 
@@ -23,10 +23,6 @@ COPY shared/ ./shared/
 
 COPY shared/prisma/ ./prisma
 COPY shared/prisma.config.ts ./prisma.config.ts
-
-# Set database URL for build 
-
-ENV LOCAL_DATABASE_URL=postgres://andrii:password@localhost:5432/shopping_db
 
 # Build the application
 
