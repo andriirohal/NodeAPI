@@ -126,15 +126,15 @@ docker compose down -v
 Configure your `.env` file with the required database credentials and connection URLs.
 
 ```env
-LOCAL_DATABASE_URL=postgres://andrii:password@localhost:5432/shopping_db
-DOCKER_DATABASE_URL=postgres://andrii:password@db:5432/shopping_db
+LOCAL_DATABASE_URL=postgres://postgres:password@localhost:5432/shopping_db
+DOCKER_DATABASE_URL=postgres://postgres:password@db:5432/shopping_db
 
-POSTGRES_USER=andrii
+POSTGRES_USER=postgres
 POSTGRES_PASSWORD=password
 POSTGRES_DB=shopping_db
 
-ACCESS_SECRET=a91f6c3d8e2b5074c5d9a1e7f3048b627e2c9f5a1d6b8034b8e4c2a7095f1d63a7c5e9b2d4f8016c3a8e5b7d9f20461e6b3c9a5d7f1028b4e9c2a6d1f5037
-REFRESH_SECRET=d72a4f9c1b6e8035a8d2c7f4e9b10563c6f1a8d5e2b9047f3d9c6a1e5b8f2074b9e3d6c2a5f8017e4b9d2c6a1f5038d5c7e2a9b4f6013c8d5e7a2b9f4061
+ACCESS_SECRET=8f3a91c6d2e74b508a1f9c63e5d8b2047a6c1f93e2b5d8079c4a6e1f3b8d2057
+REFRESH_SECRET=c7e2a9f4158b603d1e4c7a92b5f0386d9a1e7c4b2f5d8063e9a4c1b7d2f5086e
 ```
 
 Use the Docker connection URL inside containers and the local connection URL when running the backend directly on your machine. Keep your actual `.env` file out of version control.
