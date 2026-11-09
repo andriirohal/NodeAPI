@@ -143,7 +143,7 @@ Use the Docker connection URL inside containers and the local connection URL whe
 
 ## 🗄️ Database
 
-The project uses Prisma ORM to interact with PostgreSQL. The database schemas are defined in `auth/prisma/schema.prisma` and `shared/prisma/schema.prisma`.
+The project uses Prisma ORM to interact with PostgreSQL. Each service maintains its own database schema in its respective `prisma/schema.prisma` file.
 
 The `users` model includes:
 
