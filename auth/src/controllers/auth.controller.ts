@@ -7,16 +7,16 @@ import type { AuthInput, UserInput } from "../../../shared/src/types/shared.type
 
 export async function signUpUserController(req: Request<{}, {}, UserInput>, res: Response, next: NextFunction) {
   try {
-    const response = await signUpUser(req.body);
+    const createdUser = await signUpUser(req.body);
     
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!createdUser.success) {
+      return res.status(createdUser.status).json(createdUser.error);
     };
 
-    const { refreshToken, ...data } = response.data;
+    const { refreshToken, ...data } = createdUser.data;
     res.cookie("refreshToken", refreshToken, setRefreshToken());
 
-    return res.status(response.status).json(data);
+    return res.status(createdUser.status).json(data);
 
   } catch (error) {
     next(error);
@@ -25,16 +25,16 @@ export async function signUpUserController(req: Request<{}, {}, UserInput>, res:
 
 export async function logInUserController(req: Request<{}, {}, AuthInput>, res: Response, next: NextFunction) {
   try {
-    const response = await logInUser(req.body);
+    const loggedInUser = await logInUser(req.body);
     
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!loggedInUser.success) {
+      return res.status(loggedInUser.status).json(loggedInUser.error);
     };
 
-    const { refreshToken, ...data } = response.data;
+    const { refreshToken, ...data } = loggedInUser.data;
     res.cookie("refreshToken", refreshToken, setRefreshToken());
 
-    return res.status(response.status).json(data);
+    return res.status(loggedInUser.status).json(data);
 
   } catch (error) {
     next(error);
@@ -53,14 +53,14 @@ export async function logOutUserController(req: Request, res: Response, next: Ne
       });
     };
 
-    const response = await logOutUser(refreshToken);
+    const loggedOutUser = await logOutUser(refreshToken);
 
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!loggedOutUser.success) {
+      return res.status(loggedOutUser.status).json(loggedOutUser.error);
     };
 
     res.clearCookie("refreshToken", clearRefreshToken());
-    return res.status(response.status).json(response.data);
+    return res.status(loggedOutUser.status).json(loggedOutUser.data);
 
   } catch (error) {
     next(error);
@@ -79,18 +79,18 @@ export async function rotateUserTokensController(req: Request, res: Response, ne
       });
     };
 
-    const response = await rotateUserTokens(refreshToken);
+    const rotatedTokens = await rotateUserTokens(refreshToken);
 
-    if (!response.success) {
+    if (!rotatedTokens.success) {
       res.clearCookie("refreshToken", clearRefreshToken());
       
-      return res.status(response.status).json(response);
+      return res.status(rotatedTokens.status).json(rotatedTokens.error);
     };
 
-    const { refreshToken: storedRefreshToken, ...data } = response.data;
+    const { refreshToken: storedRefreshToken, ...data } = rotatedTokens.data;
     res.cookie("refreshToken", storedRefreshToken, clearRefreshToken());
 
-    return res.status(response.status).json(data);
+    return res.status(rotatedTokens.status).json(data);
 
   } catch (error) {
     next(error);
@@ -101,13 +101,13 @@ export async function getLoggedInUserController(req: Request, res: Response, nex
   try {
     const { userId } = req.user;
 
-    const response = await getLoggedInUser(userId);
+    const loggedInUser = await getLoggedInUser(userId);
     
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!loggedInUser.success) {
+      return res.status(loggedInUser.status).json(loggedInUser.error);
     };
 
-    return res.status(response.status).json(response.data);
+    return res.status(loggedInUser.status).json(loggedInUser.data);
 
   } catch (error) {
     next(error);

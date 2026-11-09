@@ -12,35 +12,31 @@ afterEach(async () => {
 });
 
 test("gets the logged in user", async () => {
-  const user = await signUpUser({
+  const createdUser = await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  if (!user.success) {
+  if (!createdUser.success) {
     throw new Error("Expected a user");
   };
 
-  const response = await getLoggedInUser(user.data.userId);
+  const loggedInUser = await getLoggedInUser(createdUser.data.userId);
 
-  expect(response.success).toBe(true);
-  expect(response.status).toBe(200);
+  expect(loggedInUser.success).toBe(true);
+  expect(loggedInUser.status).toBe(200);
 });
 
 test("rejects missing user", async () => {
-  const user = await signUpUser({
+  await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  if (!user.success) {
-    throw new Error("Expected a user");
-  };
+  const loggedInUser = await getLoggedInUser("7f3a9c2e-6b41-4d85-9a72-e1c6b0f4583d");
 
-  const response = await getLoggedInUser("7f3a9c2e-6b41-4d85-9a72-e1c6b0f4583d");
-
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(404);
+  expect(loggedInUser.success).toBe(false);
+  expect(loggedInUser.status).toBe(404);
 });

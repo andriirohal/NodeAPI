@@ -2,7 +2,7 @@
 
 FROM node:24
 
-# Goes to the app directory
+# Set the working directory
 
 WORKDIR /app/
 
@@ -14,25 +14,27 @@ COPY shopping/package*.json /app/
 
 RUN npm ci
 
-# Copy the rest of the app
+# Copy application configuration
 
 COPY shopping/tsconfig.json ./tsconfig.json
+COPY shared/prisma.config.ts ./prisma.config.ts
+
+# Copy application and shared source files
 
 COPY shopping/ ./shopping/
 COPY shared/ ./shared/
 
 COPY shared/prisma/ ./prisma
-COPY shared/prisma.config.ts ./prisma.config.ts
 
 # Build the application
 
 RUN npm run build
 
-# Set port environment variable
+# Set the application port
 
 ENV PORT=8081
 
-# Expose the port to the host.
+# Expose the application port
 
 EXPOSE 8081
 

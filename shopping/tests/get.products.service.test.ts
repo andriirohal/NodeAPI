@@ -9,8 +9,8 @@ test("gets products", async () => {
     stock: 230
   });
   
-  const response = await getProducts(10, 0);
+  const retrievedProducts = await getProducts(10, 0);
 
-  expect(response.success).toBe(true);
-  expect(response.status).toBe(200);
+  expect(retrievedProducts.success).toBe(true);
+  expect(retrievedProducts.status).toBe(200);
 });

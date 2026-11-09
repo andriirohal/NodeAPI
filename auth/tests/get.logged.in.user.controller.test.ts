@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 
 import type { UserPayload } from "../../shared/src/types/express.js";
 
-import { signAccessString } from "../../shared/src/jwt/shared.jwt.js";
+import { signAccessToken } from "../../shared/src/jwt/shared.jwt.js";
 import { timestamptz } from "./utils/utils.timestamptz.js";
 
 jest.mock("../src/services/auth.service.js", () => ({
@@ -33,7 +33,7 @@ test("gets a logged in user", async () => {
     role: "user"
   } as UserPayload;
 
-  const accessToken = signAccessString(payload);
+  const accessToken = signAccessToken(payload);
 
   const req = {
     user: {
@@ -74,7 +74,7 @@ test("rejects an missing user", async () => {
     role: "user"
   } as UserPayload;
 
-  const accessToken = signAccessString(payload);
+  const accessToken = signAccessToken(payload);
 
   const req = {
     user: {

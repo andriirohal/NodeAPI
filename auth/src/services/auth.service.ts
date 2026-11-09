@@ -82,7 +82,7 @@ export async function signUpUser(input: UserInput): Promise<Result<UserResponse>
     }
   });
 
-   const response = {
+   const createdUser = {
     userId: user.id,
     name: user.name,
     email: user.email,
@@ -94,7 +94,7 @@ export async function signUpUser(input: UserInput): Promise<Result<UserResponse>
 
   return {
     success: true,
-    data: response,
+    data: createdUser,
     status: 201
   };
 };
@@ -180,7 +180,7 @@ export async function logInUser(input: AuthInput): Promise<Result<UserResponse>>
     }
   });
 
-  const response = {
+  const loggedInUser = {
     userId: user.id,
     name: user.name,
     email: user.email,
@@ -192,7 +192,7 @@ export async function logInUser(input: AuthInput): Promise<Result<UserResponse>>
 
   return {
     success: true,
-    data: response,
+    data: loggedInUser,
     status: 200
   };
 };
@@ -219,7 +219,7 @@ export async function getLoggedInUser(userId: string): Promise<Result<UserRecord
     };
   };
 
-  const response = {
+  const loggedInUser = {
     userId: user.id,
     name: user.name,
     email: user.email,
@@ -229,7 +229,7 @@ export async function getLoggedInUser(userId: string): Promise<Result<UserRecord
 
   return {
     success: true,
-    data: response,
+    data: loggedInUser,
     status: 200
   };
 };
@@ -271,7 +271,7 @@ export async function logOutUser(refreshToken: string | null): Promise<Result<Us
       }
     });
   
-    const response = {
+    const loggedOutUser = {
       userId: user.id,
       name: user.name,
       email: user.email,
@@ -281,7 +281,7 @@ export async function logOutUser(refreshToken: string | null): Promise<Result<Us
   
     return {
       success: true,
-      data: response,
+      data: loggedOutUser,
       status: 200
     };
 

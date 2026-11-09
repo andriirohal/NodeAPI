@@ -18,15 +18,15 @@ test("deletes a product", async () => {
     throw new Error("Expected a product");
   };
 
-  const response = await deleteProduct(product.data.id);
+  const deletedProduct = await deleteProduct(product.data.id);
 
-  expect(response.success).toBe(true);
-  expect(response.status).toBe(200);
+  expect(deletedProduct.success).toBe(true);
+  expect(deletedProduct.status).toBe(200);
 });
 
 test("rejects missing product", async () => {
-  const response = await deleteProduct("7f3a9c2e-6b41-4d85-9a72-e1c6b0f4583d");
+  const deletedProduct = await deleteProduct("7f3a9c2e-6b41-4d85-9a72-e1c6b0f4583d");
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(404);
+  expect(deletedProduct.success).toBe(false);
+  expect(deletedProduct.status).toBe(404);
 });
