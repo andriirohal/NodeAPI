@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 
 import { CookieOptions } from "express";
 
-import { signAccessString, signRefreshString, verifyRefreshString } from "../jwt/shared.jwt.js";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../jwt/shared.jwt.js";
 
 import type { UserPayload } from "../types/express.js";
 import type { Authentication } from "../types/shared.types.js";
@@ -48,8 +48,8 @@ export function isValidPassword(password: unknown): password is string {
 };
 
 export function issueAuthentication(payload: UserPayload): Authentication {
-  const accessToken = signAccessString(payload);
-  const refreshToken = signRefreshString(payload);
+  const accessToken = signAccessToken(payload);
+  const refreshToken = signRefreshToken(payload);
 
   return {
     accessToken,
@@ -66,7 +66,7 @@ export function parseRefreshToken(refreshToken: string | null): UserPayload | nu
     return null;
   };
 
-  return verifyRefreshString(refreshToken);
+  return verifyRefreshToken(refreshToken);
 };
 
 export function setRefreshToken(): CookieOptions {

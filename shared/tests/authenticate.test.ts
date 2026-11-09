@@ -1,7 +1,7 @@
 import { jest, test, expect } from "@jest/globals";
 import type { Request, Response, NextFunction } from "express";
 
-import { signAccessString } from "../src/jwt/shared.jwt.js";
+import { signAccessToken } from "../src/jwt/shared.jwt.js";
 
 import { authenticate } from "../src/middlewares/shared.middleware.js";
 import type { UserPayload } from "../src/types/express.js";
@@ -14,7 +14,7 @@ test("authenticates a user", () => {
     role: "user" 
   } as UserPayload;
 
-  const accessToken = signAccessString(payload);
+  const accessToken = signAccessToken(payload);
 
   const req = {
     user: {
@@ -95,7 +95,7 @@ test("rejects an invalid access token", () => {
 
 test("rejects an empty user payload", () => {
   const payload = {} as UserPayload;
-  const accessToken = signAccessString(payload);
+  const accessToken = signAccessToken(payload);
 
   const req = {
     user: {

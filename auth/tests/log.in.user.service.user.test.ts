@@ -14,126 +14,102 @@ afterEach(async () => {
 });
 
 test("logs in a user", async () => {
-  const user = await signUpUser({
+  await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  if (!user.success) {
-    throw new Error("Expected a user");
-  };
-
-  const response = await logInUser({
-    email: user.data.email,
+  const loggedInUser = await logInUser({
+    email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  expect(response.success).toBe(true);
-  expect(response.status).toBe(200);
+  expect(loggedInUser.success).toBe(true);
+  expect(loggedInUser.status).toBe(200);
 });
 
 test("rejects an invalid email", async () => {
-  const user = await signUpUser({
+  await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  if (!user.success) {
-    throw new Error("Expected a user");
-  };
-
-  const response = await logInUser({
-    email: "sarah.test",
+  const loggedInUser = await logInUser({
+    email: "sarah.test@",
     password: "sarah12345"
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(400);
+  expect(loggedInUser.success).toBe(false);
+  expect(loggedInUser.status).toBe(400);
 });
 
 test("rejects an invalid password", async () => {
-  const user = await signUpUser({
+  await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  if (!user.success) {
-    throw new Error("Expected a user");
-  };
-
-  const response = await logInUser({
+  const loggedInUser = await logInUser({
     email: "sarah.test@example.com",
     password: ""
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(400);
+  expect(loggedInUser.success).toBe(false);
+  expect(loggedInUser.status).toBe(400);
 });
 
 test("rejects an invalid email", async () => {
-  const user = await signUpUser({
+  await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  if (!user.success) {
-    throw new Error("Expected a user");
-  };
-
-  const response = await logInUser({
+  const loggedInUser = await logInUser({
     email: "sarah.invalid@example.com",
     password: "sarah12345"
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(401);
+  expect(loggedInUser.success).toBe(false);
+  expect(loggedInUser.status).toBe(401);
 });
 
 test("rejects an invalid password", async () => {
-  const user = await signUpUser({
+  await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  if (!user.success) {
-    throw new Error("Expected a user");
-  };
-
-  const response = await logInUser({
+  const loggedInUser = await logInUser({
     email: "sarah.test@example.com",
     password: "invalid12345"
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(401);
+  expect(loggedInUser.success).toBe(false);
+  expect(loggedInUser.status).toBe(401);
 });
 
 test("rejects an invalid refresh token", async () => {
-  const user = await signUpUser({
+  await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
-
-  if (!user.success) {
-    throw new Error("Expected a user");
-  };
 
   jest.spyOn(authHelpers, "issueAuthentication").mockReturnValue({
     accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLTEyMyIsImlhdCI6MTc2MTYwMDAwMH0.signature",
     refreshToken: ""
   });
 
-  const response = await logInUser({
-    email: user.data.email,
+  const loggedInUser = await logInUser({
+    email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(401);
+  expect(loggedInUser.success).toBe(false);
+  expect(loggedInUser.status).toBe(401);
 });

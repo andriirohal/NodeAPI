@@ -1,6 +1,7 @@
 import { expect, test } from "@jest/globals";
 
 import { isValidEmail, isValidName, isValidPassword, isUserPayload } from "../src/helpers/shared.helper.js";
+import { getEnvironmentKey } from "../src/jwt/shared.jwt.js";
 
 test("validates name", () => {
   expect(isValidName("Sarah")).toBe(true);
@@ -26,4 +27,8 @@ test("validates password", () => {
 test("validates user payload", () => {
   expect(isUserPayload({})).toBe(false);
   expect(isUserPayload(null)).toBe(false);
+});
+
+test("rejects an invalid secret key", () => {
+  expect(getEnvironmentKey("MISSING_SECRET")).toBe("");
 });

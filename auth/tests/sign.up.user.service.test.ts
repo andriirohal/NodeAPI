@@ -14,47 +14,47 @@ afterEach(async () => {
 });
 
 test("signs up a user", async () => {
-  const response = await signUpUser({
+  const createdUser = await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  expect(response.success).toBe(true);
-  expect(response.status).toBe(201);
+  expect(createdUser.success).toBe(true);
+  expect(createdUser.status).toBe(201);
 });
 
 test("rejects an invalid name", async () => {
-  const response = await signUpUser({
+  const createdUser = await signUpUser({
     name: "",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(400);
+  expect(createdUser.success).toBe(false);
+  expect(createdUser.status).toBe(400);
 });
 
 test("rejects an invalid email", async () => {
-  const response = await signUpUser({
+  const createdUser = await signUpUser({
     name: "Sarah",
     email: "sarah.test",
     password: "sarah12345"
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(400);
+  expect(createdUser.success).toBe(false);
+  expect(createdUser.status).toBe(400);
 });
 
 test("rejects an invalid password", async () => {
-  const response = await signUpUser({
+  const createdUser = await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: ""
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(400);
+  expect(createdUser.success).toBe(false);
+  expect(createdUser.status).toBe(400);
 });
 
 test("rejects an invalid refresh token", async () => {
@@ -63,12 +63,12 @@ test("rejects an invalid refresh token", async () => {
     refreshToken: ""
   });
 
-  const response = await signUpUser({
+  const createdUser = await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(401);
+  expect(createdUser.success).toBe(false);
+  expect(createdUser.status).toBe(401);
 });

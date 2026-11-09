@@ -14,34 +14,34 @@ afterEach(async () => {
 });
 
 test("logs out a user", async () => {
-  const user = await signUpUser({
+  const createdUser = await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
     password: "sarah12345"
   });
 
-  if (!user.success) {
+  if (!createdUser.success) {
     throw new Error("Expected a user");
   };
 
-  const response = await logOutUser(user.data.refreshToken);
+  const loggedOutUser = await logOutUser(createdUser.data.refreshToken);
 
-  expect(response.success).toBe(true);
-  expect(response.status).toBe(200);
+  expect(loggedOutUser.success).toBe(true);
+  expect(loggedOutUser.status).toBe(200);
 });
 
 test("rejects an invalid refresh token", async () => {
-  const response = await logOutUser("");
+  const loggedOutUser = await logOutUser("");
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(401);
+  expect(loggedOutUser.success).toBe(false);
+  expect(loggedOutUser.status).toBe(401);
 });
 
 test("rejects an invalid refresh token", async () => {
-  const response = await logOutUser("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLTEyMyIsImlhdCI6MTc2MTYwMDAwMH0.signature");
+  const loggedOutUser = await logOutUser("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLTEyMyIsImlhdCI6MTc2MTYwMDAwMH0.signature");
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(401);
+  expect(loggedOutUser.success).toBe(false);
+  expect(loggedOutUser.status).toBe(401);
 });
 
 test("rejects an invalid refresh token", async () => {
@@ -52,8 +52,26 @@ test("rejects an invalid refresh token", async () => {
     role: "user"
   });
   
-  const response = await logOutUser("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLTEyMyIsImlhdCI6MTc2MTYwMDAwMH0.signature");
+  const loggedOutUser = await logOutUser("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLTEyMyIsImlhdCI6MTc2MTYwMDAwMH0.signature");
 
-  expect(response.success).toBe(false);
-  expect(response.status).toBe(401);
+  expect(loggedOutUser.success).toBe(false);
+  expect(loggedOutUser.status).toBe(401);
+});
+
+test("returns a database error", async () => {
+  const createdUser = await signUpUser({
+    name: "Sarah",
+    email: "sarah.test@example.com",
+    password: "sarah12345"
+  });
+
+  if (!createdUser.success) {
+    throw new Error("Expected a user");
+  };
+
+  jest.spyOn(client.users, "update").mockRejectedValue(new Error("Database error"));
+
+  await expect(logOutUser(
+    createdUser.data.refreshToken)
+  ).rejects.toThrow("Database error");
 });

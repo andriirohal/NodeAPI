@@ -4,7 +4,7 @@ import req from "supertest";
 import { app } from "../src/app.js";
 
 test("handles app health check", async () => {
-  const response = await req(app).get("/");
+  const server = await req(app).get("/");
 
-  expect(response.status).toBe(200);
+  expect(server.status).toBe(200);
 });

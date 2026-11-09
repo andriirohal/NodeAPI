@@ -40,50 +40,26 @@ A backend project built with **Node.js, Express, TypeScript, and PostgreSQL**, f
 ## 📁 Project Structure
 
 ```text
-
 ├── auth/
 │   ├── prisma/
-│   │   └── schema.prisma
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── prisma/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── app.ts
-│   │   └── server.ts
 │   └── tests/
 │
 ├── shopping/
 │   ├── prisma/
-│   │   └── schema.prisma
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── helpers/
-│   │   ├── middlewares/
-│   │   ├── prisma/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── types/
-│   │   ├── app.ts
-│   │   └── server.ts
 │   └── tests/
 │
 ├── shared/
 │   ├── prisma/
-│   │   └── schema.prisma
 │   ├── src/
-│   │   ├── helpers/
-│   │   ├── jwt/
-│   │   ├── middlewares/
-│   │   ├── prisma/
-│   │   ├── types/
-│   │   ├── config.ts
 │   └── tests/
 │
 ├── .dockerignore
-└── README.md
-├── init.sql
+├── .gitignore
 ├── compose.yaml
+├── init.sql
+└── README.md
 ```
 
 ---
@@ -150,12 +126,15 @@ docker compose down -v
 Configure your `.env` file with the required database credentials and connection URLs.
 
 ```env
-LOCAL_DATABASE_URL=postgres://andrii:password@localhost:5432/shopping_db
-DOCKER_DATABASE_URL=postgres://andrii:password@db:5432/shopping_db
+LOCAL_DATABASE_URL=postgres://postgres:password@localhost:5432/shopping_db
+DOCKER_DATABASE_URL=postgres://postgres:password@db:5432/shopping_db
 
-POSTGRES_USER=andrii
+POSTGRES_USER=postgres
 POSTGRES_PASSWORD=password
 POSTGRES_DB=shopping_db
+
+ACCESS_SECRET=your-access-secret
+REFRESH_SECRET=your-refresh-secret
 ```
 
 Use the Docker connection URL inside containers and the local connection URL when running the backend directly on your machine. Keep your actual `.env` file out of version control.

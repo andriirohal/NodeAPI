@@ -2,7 +2,7 @@
 
 FROM node:24
 
-# Goes to the app directory
+# Set the working directory
 
 WORKDIR /app/
 
@@ -14,12 +14,16 @@ COPY auth/package*.json ./
 
 RUN npm ci
 
-# Copy the rest of the app
+# Copy application configuration
 
 COPY auth/tsconfig.json ./tsconfig.json
 
+# Copy application and shared source files
+
 COPY auth/ ./auth/
 COPY shared/ ./shared/
+
+# Copy Prisma configuration and schema
 
 COPY shared/prisma/ ./prisma
 COPY shared/prisma.config.ts ./prisma.config.ts
@@ -28,11 +32,11 @@ COPY shared/prisma.config.ts ./prisma.config.ts
 
 RUN npm run build
 
-# Set port environment variable
+# Set the application port
 
 ENV PORT=8080
 
-# Expose the port to the host.
+# Expose the application port
 
 EXPOSE 8080
 

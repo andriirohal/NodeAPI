@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { Prisma } from "@prisma/client";
 
-import { verifyAccessString } from "../jwt/shared.jwt.js";
+import { verifyAccessToken } from "../jwt/shared.jwt.js";
 
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   const authorization = req.headers.authorization;
@@ -26,7 +26,7 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
 
   const accessToken = parts[1];
 
-  const payload = verifyAccessString(accessToken);
+  const payload = verifyAccessToken(accessToken);
 
   if (!payload) {
     return res.status(401).json({

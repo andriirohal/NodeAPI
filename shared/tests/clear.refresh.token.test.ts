@@ -8,7 +8,7 @@ test("clears the refresh token cookie", () => {
       httpOnly: true,
       secure: false,
       path: "/",
-      maxAge: -1,
+      maxAge: 0,
       sameSite: "lax" as const
     })
   );

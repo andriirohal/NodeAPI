@@ -1,7 +1,7 @@
 import { jest, test, expect } from "@jest/globals";
 import type { Request, Response, NextFunction } from "express";
 
-import { signRefreshString } from "../../shared/src/jwt/shared.jwt.js";
+import { signRefreshToken } from "../../shared/src/jwt/shared.jwt.js";
 
 import { timestamptz } from "./utils/utils.timestamptz.js";
 import type { UserPayload } from "../../shared/src/types/express.js";
@@ -33,7 +33,7 @@ test("logs out a user", async () => {
     role: "user"
   } as UserPayload;
   
-  const refreshToken = signRefreshString(payload);
+  const refreshToken = signRefreshToken(payload);
 
   const req = {
     cookies: {

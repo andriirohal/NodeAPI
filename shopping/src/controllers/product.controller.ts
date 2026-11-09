@@ -7,13 +7,13 @@ export async function getProductController(req: Request<{ id: string }>, res: Re
   try {
     const { id } = req.params;
 
-    const response = await services.getProduct(id);
+    const retrievedProduct = await services.getProduct(id);
 
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!retrievedProduct.success) {
+      return res.status(retrievedProduct.status).json(retrievedProduct.error);
     };
 
-    return res.status(response.status).json(response.data);
+    return res.status(retrievedProduct.status).json(retrievedProduct.data);
   
   } catch(error) {
     next(error);
@@ -22,13 +22,13 @@ export async function getProductController(req: Request<{ id: string }>, res: Re
 
 export async function createProductController(req: Request<{}, {}, CreateProductInput>, res: Response, next: NextFunction) {
   try {
-    const response = await services.createProduct(req.body);
+    const createdProduct = await services.createProduct(req.body);
 
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!createdProduct.success) {
+      return res.status(createdProduct.status).json(createdProduct.error);
     };
 
-    return res.status(response.status).json(response.data);
+    return res.status(createdProduct.status).json(createdProduct.data);
   
   } catch(error) {
     next(error);
@@ -39,13 +39,13 @@ export async function deleteProductController(req: Request<{ id: string }>, res:
   try {
     const { id } = req.params;
 
-    const response = await services.deleteProduct(id);
+    const deletedProduct = await services.deleteProduct(id);
 
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!deletedProduct.success) {
+      return res.status(deletedProduct.status).json(deletedProduct.error);
     };
 
-    return res.status(response.status).json(response.data);
+    return res.status(deletedProduct.status).json(deletedProduct.data);
   
   } catch(error) {
     next(error);
@@ -56,13 +56,13 @@ export async function updateProductController(req: Request<{ id: string }, {}, U
   try {
     const { id } = req.params;
 
-    const response = await services.updateProduct(id, req.body);
+    const updatedProduct = await services.updateProduct(id, req.body);
 
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!updatedProduct.success) {
+      return res.status(updatedProduct.status).json(updatedProduct.error);
     };
 
-    return res.status(response.status).json(response.data);
+    return res.status(updatedProduct.status).json(updatedProduct.data);
   
   } catch(error) {
     next(error);
@@ -74,13 +74,13 @@ export async function getProductsController(req: Request<{}, {}, {}, { limit: nu
     const { limit } = req.query;
     const { offset } = req.query;
 
-    const response = await services.getProducts(limit, offset);  
+    const retrievedProducts = await services.getProducts(limit, offset);  
 
-    if (!response.success) {
-      return res.status(response.status).json(response);
+    if (!retrievedProducts.success) {
+      return res.status(retrievedProducts.status).json(retrievedProducts.error);
     };
     
-    return res.status(response.status).json(response.data);
+    return res.status(retrievedProducts.status).json(retrievedProducts.data);
   
   } catch(error) {
     next(error);

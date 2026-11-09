@@ -1,10 +1,10 @@
 import { afterEach, test, expect } from "@jest/globals";
 
 import { signUpUser } from "../../auth/src/services/auth.service.js";
-import { client } from "../../auth/src/prisma/client.js";
+import { client } from "../src/prisma/client.js";
 
-import { signAccessString, verifyAccessString } from "../src/jwt/shared.jwt.js";
 import type { UserPayload } from "../src/types/express.js";
+import { verifyRefreshToken, signRefreshToken } from "../src/jwt/shared.jwt.js";
 
 afterEach(async () => {
   await client.users.deleteMany({
@@ -14,7 +14,7 @@ afterEach(async () => {
   });
 });
 
-test("verifies an access token", async () => {
+test("verifies a refresh token", async () => {
   const user = await signUpUser({
     name: "Sarah",
     email: "sarah.test@example.com",
@@ -24,33 +24,28 @@ test("verifies an access token", async () => {
   if (!user.success) {
     throw new Error("Expected a user");
   };
-  
+
   const payload = {
     userId: user.data.userId,
     name: user.data.name,
     email: user.data.email,
     role: user.data.role
-  } as UserPayload; 
+  } as UserPayload;
 
-  const accessToken = signAccessString(payload);
-  const response = verifyAccessString(accessToken);
+  const refreshToken = signRefreshToken(payload);
 
-  expect(response).toEqual(
+  expect(verifyRefreshToken(refreshToken)).toEqual(
     expect.objectContaining(payload)
   );
 });
 
-test("rejects an invalid user payload", () => {
+test("rejects an invalid user payload", async () => {
   const payload = {} as UserPayload;
+  const refreshToken = signRefreshToken(payload);
 
-  const accessToken = signAccessString(payload);
-  const response = verifyAccessString(accessToken);
-
-  expect(response).toBeNull();
+  expect(verifyRefreshToken(refreshToken)).toBeNull();
 });
 
-test("returns null when an error occurs", async () => {
-  const response = verifyAccessString("");
-
-  expect(response).toBeNull();
+test("returns null when an error occurs", () => {
+  expect(verifyRefreshToken("")).toBeNull();
 });

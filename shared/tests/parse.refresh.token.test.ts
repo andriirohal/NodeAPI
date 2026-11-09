@@ -3,7 +3,7 @@ import { test, expect } from "@jest/globals";
 import type { UserPayload } from "../src/types/express.js";
 
 import { parseRefreshToken } from "../src/helpers/shared.helper.js";
-import { signRefreshString } from "../src/jwt/shared.jwt.js";
+import { signRefreshToken } from "../src/jwt/shared.jwt.js";
 
 test("parses a refresh token", () => {
   const payload = {
@@ -13,7 +13,7 @@ test("parses a refresh token", () => {
     role: "user"
   } as UserPayload;
 
-  const refreshToken = signRefreshString(payload);
+  const refreshToken = signRefreshToken(payload);
 
   expect(parseRefreshToken(refreshToken)).toEqual(
     expect.objectContaining(payload)
