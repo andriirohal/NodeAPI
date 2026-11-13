@@ -3,6 +3,8 @@ import type { Request, Response } from "express";
 
 import cors from "cors";
 
+import { rateLimiting } from "../../shared/src/middlewares/shared.middleware.js";
+
 import { errorHandler, uniqueHandler } from "./middlewares/product.middleware.js";
 import { router } from "./routes/product.routes.js";
 
@@ -10,6 +12,8 @@ export const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use(rateLimiting());
 
 app.use("/products", router);
 

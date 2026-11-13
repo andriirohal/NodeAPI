@@ -1,4 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
+import rateLimit from "express-rate-limit";
+
 import { Prisma } from "@prisma/client";
 
 import { verifyAccessToken } from "../jwt/shared.jwt.js";
@@ -50,6 +52,14 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
   };
 
   next();
+};
+
+export function rateLimiting() {
+  return rateLimit({
+    max: 100,
+    windowMs: 1 * 60 * 1000,
+    message: "We have received too many requests"
+  });
 };
 
 export function uniqueHandler(error: unknown, _req: Request, res: Response, next: NextFunction) {
