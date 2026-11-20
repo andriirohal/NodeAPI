@@ -132,9 +132,6 @@ DOCKER_DATABASE_URL=postgres://postgres:password@db:5432/shopping_db
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=password
 POSTGRES_DB=shopping_db
-
-ACCESS_SECRET=<accessSecret>
-REFRESH_SECRET=<refreshSecret>
 ```
 
 Use the Docker connection URL inside containers and the local connection URL when running the backend directly on your machine. Keep your actual `.env` file out of version control.
