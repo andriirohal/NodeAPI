@@ -72,7 +72,7 @@ export function parseRefreshToken(refreshToken: string | null): UserPayload | nu
 export function setRefreshToken(): CookieOptions {
   return {
     httpOnly: true,
-    secure: false,
+    secure: true,
     path: "/",
     maxAge: 14 * 24 * 60 * 60 * 1000,
     sameSite: "lax" as const
@@ -82,7 +82,7 @@ export function setRefreshToken(): CookieOptions {
 export function clearRefreshToken(): CookieOptions {
   return {
     httpOnly: true,
-    secure: false,
+    secure: true,
     path: "/",
     maxAge: 0,
     sameSite: "lax" as const
