@@ -50,3 +50,30 @@ test("rejects an invalid stock", async () => {
   expect(createdProduct.success).toBe(false);
   expect(createdProduct.status).toBe(400);
 });
+
+test("rejects a duplicate product", async () => {
+  await createProduct({
+    name: "Samsung galaxy S26 Ultra",
+    price: 2000,
+    stock: 200
+  });
+
+  const createdProduct = await createProduct({
+    name: "Samsung galaxy S26 Ultra",
+    price: 2000,
+    stock: 200
+  });
+
+  expect(createdProduct.success).toBe(false);
+  expect(createdProduct.status).toBe(409);
+});
+
+test("returns a database error", async () => {
+  jest.spyOn(client.products, "create").mockRejectedValue(new Error("Database error"));
+
+  await expect(createProduct({
+    name: "Samsung galaxy S26 Ultra",
+    price: 2000,
+    stock: 200
+  })).rejects.toThrow("Database error");
+});

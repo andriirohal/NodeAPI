@@ -61,3 +61,21 @@ test("rejects missing product", async () => {
   expect(updatedProduct.success).toBe(false);
   expect(updatedProduct.status).toBe(404);
 });
+
+test("returns a database error", async () => {
+  const createdProduct = await createProduct({
+    name: "Samsung galaxy S21",
+    price: 400,
+    stock: 100
+  });
+
+  if (!createdProduct.success) {
+    throw new Error("Expected a product");
+  };
+
+  jest.spyOn(client.products, "update").mockRejectedValue(new Error("Database error"));
+
+  await expect(updateProduct(createdProduct.data.id, {
+    price: 250
+  })).rejects.toThrow("Database error");
+});

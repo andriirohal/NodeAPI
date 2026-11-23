@@ -17,18 +17,6 @@ export function validateId(req: Request<{ id: string }>, res: Response, next: Ne
   next();
 };
 
-export function uniqueHandler(error: unknown, _req: Request, res: Response, next: NextFunction) {
-  if(error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-    return res.status(409).json({
-      success: false,
-      error: "A product with this name already exists",
-      status: 409
-    });
-  };
-
-  next(error);
-};
-
 export function errorHandler(error: unknown, _req: Request, res: Response, _next: NextFunction) {
   console.error(error);
 

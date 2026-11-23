@@ -6,61 +6,74 @@ import { isValidName, isValidPrice, isValidStock, normalizedLimit, normalizedOff
 import { client } from "../prisma/client.js";
 
 export async function createProduct(input: CreateProductInput): Promise<Result<Product>> {
-  const { name, price, stock } = input;
-
-  if(!isValidName(name)) {
-    return {
-      success: false,
-      error: "Name cannot be empty",
-      status: 400
+  try {
+    const { name, price, stock } = input;
+  
+    if(!isValidName(name)) {
+      return {
+        success: false,
+        error: "Name cannot be empty",
+        status: 400
+      };
     };
-  };
-
-  if(!isValidPrice(price)) {
-    return {
-      success: false,
-      error: "Price must be greater than 0",
-      status: 400
+  
+    if(!isValidPrice(price)) {
+      return {
+        success: false,
+        error: "Price must be greater than 0",
+        status: 400
+      };
     };
-  };
-
-  if(!isValidStock(stock)) {
-    return {
-      success: false,
-      error: "Stock must be positive",
-      status: 400
+  
+    if(!isValidStock(stock)) {
+      return {
+        success: false,
+        error: "Stock must be positive",
+        status: 400
+      };
     };
-  };
+  
+    const product = await client.products.create({
+      data: {
+        name,
+        price,
+        stock
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        stock: true,
+        created_at: true,
+        updated_at: true
+      }
+    });
+  
+    const response = {
+      id: product.id,
+      name: product.name,
+      price: Number(product.price),
+      stock: product.stock,
+      createdAt: product.created_at,
+      updatedAt: product.updated_at
+    };
+  
+    return {
+      success: true,
+      data: response,
+      status: 201
+    };
 
-  const product = await client.products.create({
-    data: {
-      name,
-      price,
-      stock
-    },
-    select: {
-      id: true,
-      name: true,
-      price: true,
-      stock: true,
-      created_at: true,
-      updated_at: true
-    }
-  });
-
-  const response = {
-    id: product.id,
-    name: product.name,
-    price: Number(product.price),
-    stock: product.stock,
-    createdAt: product.created_at,
-    updatedAt: product.updated_at
-  };
-
-  return {
-    success: true,
-    data: response,
-    status: 201
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return {
+        success: false,
+        error: "A product with this name already exists",
+        status: 409
+      };
+    };
+    
+    throw error;
   };
 };
 
