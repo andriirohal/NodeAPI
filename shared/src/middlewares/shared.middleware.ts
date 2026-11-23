@@ -1,8 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import rateLimit from "express-rate-limit";
 
-import { Prisma } from "@prisma/client";
-
 import { verifyAccessToken } from "../jwt/shared.jwt.js";
 
 export function authenticate(req: Request, res: Response, next: NextFunction) {
@@ -60,18 +58,6 @@ export function rateLimiting() {
     windowMs: 1 * 60 * 1000,
     message: "We have received too many requests"
   });
-};
-
-export function uniqueHandler(error: unknown, _req: Request, res: Response, next: NextFunction) {
-  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-    return res.status(409).json({
-      success: false,
-      error: "An account with this email address already exists",
-      status: 409
-    });
-  };
-
-  next(error);
 };
 
 export function errorHandler(error: unknown, _req: Request, res: Response, _next: NextFunction) {

@@ -7,95 +7,108 @@ import type { UserInput, AuthInput, Result, UserResponse, UserRecord, Authentica
 import { client } from "../prisma/client.js";
 
 export async function signUpUser(input: UserInput): Promise<Result<UserResponse>> {
-  const name = input.name;
-
-  if (!isValidName(name)) {
-    return {
-      success: false,
-      error: "Name cannot be empty",
-      status: 400
+  try {
+    const name = input.name;
+    
+    if (!isValidName(name)) {
+      return {
+        success: false,
+        error: "Name cannot be empty",
+        status: 400
+      };
     };
-  };
-
-  const email = input.email;
-
-  if (!isValidEmail(email)) {
-    return {
-      success: false,
-      error: "Please enter a valid email address",
-      status: 400
+    
+    const email = input.email;
+    
+    if (!isValidEmail(email)) {
+      return {
+        success: false,
+        error: "Please enter a valid email address",
+        status: 400
+      };
     };
-  };
-
-  const password = input.password;
-
-  if (!isValidPassword(password)) {
-    return {
-      success: false,
-      error: "Password must be valid",
-      status: 400
+    
+    const password = input.password;
+    
+    if (!isValidPassword(password)) {
+      return {
+        success: false,
+        error: "Password must be valid",
+        status: 400
+      };
     };
-  };
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await client.users.create({
-    data: {
-      name,
-      email,
-      password: hashedPassword
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      created_at: true
-    }
-  });
-
-  const payload = {
-    userId: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role
-  };
-
-  const authentication = issueAuthentication(payload);
-
-  if (!authentication.refreshToken) {
-    return {
-      success: false,
-      error: "Invalid refresh token",
-      status: 401
+    const user = await client.users.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        created_at: true
+      }
+    });
+    
+    const payload = {
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role
     };
-  };
+    
+    const authentication = issueAuthentication(payload);
+    
+    if (!authentication.refreshToken) {
+      return {
+        success: false,
+        error: "Invalid refresh token",
+        status: 401
+      };
+    };
+    
+    const hashedRefreshToken = hashRefreshToken(authentication.refreshToken);
+    
+    await client.users.update({
+      data: {
+        refresh_token: hashedRefreshToken
+      },
+      where: {
+        id: user.id
+      }
+    });
+    
+    const createdUser = {
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.created_at,
+      accessToken: authentication.accessToken,
+      refreshToken: authentication.refreshToken
+    }; 
+    
+    return {
+      success: true,
+      data: createdUser,
+      status: 201
+    };
 
-  const hashedRefreshToken = hashRefreshToken(authentication.refreshToken);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return {
+        success: false,
+        error: "An account with this email address already exists",
+        status: 409
+      };
+    };
 
-  await client.users.update({
-    data: {
-      refresh_token: hashedRefreshToken
-    },
-    where: {
-      id: user.id
-    }
-  });
-
-   const createdUser = {
-    userId: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    createdAt: user.created_at,
-    accessToken: authentication.accessToken,
-    refreshToken: authentication.refreshToken
-  }; 
-
-  return {
-    success: true,
-    data: createdUser,
-    status: 201
+    throw error;
   };
 };
 

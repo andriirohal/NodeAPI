@@ -72,3 +72,30 @@ test("rejects an invalid refresh token", async () => {
   expect(createdUser.success).toBe(false);
   expect(createdUser.status).toBe(401);
 });
+
+test("rejects duplicate email address", async () => {
+  await signUpUser({
+    name: "Sarah",
+    email: "sarah.test@example.com",
+    password: "sarah12345"
+  });
+  
+  const createdUser = await signUpUser({
+    name: "Sarah",
+    email: "sarah.test@example.com",
+    password: "sarah12345"
+  });
+
+  expect(createdUser.success).toBe(false);
+  expect(createdUser.status).toBe(409);
+});
+
+test("returns a database error", async () => {
+  jest.spyOn(client.users, "create").mockRejectedValue(new Error("Database error"));
+
+  await expect(signUpUser({
+    name: "Sarah",
+    email: "sarah.test@example.com",
+    password: "sarah12345"
+  })).rejects.toThrow("Database error");
+});
